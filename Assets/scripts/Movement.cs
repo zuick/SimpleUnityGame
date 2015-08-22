@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Movement : MonoBehaviour {
-	public float speed = 5f;
+	public float speed = 3f;
 	public float jumpForce = 1000f;
 	public bool grounded = false;
 	public bool groundedPrevious = false;
