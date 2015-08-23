@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Timers;
 
 public class Movement : MonoBehaviour {
 	public float speed = 3f;
 	public float jumpForce = 1000f;
-	public bool grounded = false;
-	public bool groundedPrevious = false;
 	public float groundCheckRadious = 0.05f;
 	public GameObject groundCheck;
 	public LayerMask groundLayer;
 	public Animator anim;
+	public bool grounded = false;
 
+	private bool groundedPrevious = false;
+	
 	private Rigidbody2D rigidbody2D;
 	// Use this for initialization
 	void Start (){
@@ -36,6 +38,7 @@ public class Movement : MonoBehaviour {
 
 		groundedPrevious = grounded;
 
+		//AttemptDigging (moveX);
 	}
 
 	void Update(){
