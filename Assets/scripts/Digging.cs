@@ -9,11 +9,13 @@ public class Digging : MonoBehaviour {
 	private GameObject objectToDig;
 	private bool grounded;
 	private float moveX = 0f;
+	private float moveY = 0f;
 
 	void FixedUpdate()
 	{
-		moveX = Input.GetAxis ("Horizontal");
-		isMovementAttempted = !IsAlmostZero(moveX);
+		moveX = Input.GetAxis("Horizontal");
+		moveY = Input.GetAxis("Vertical");
+		isMovementAttempted = !IsAlmostZero(moveX) || !IsAlmostZero(moveY);
 		grounded = GetComponent<Movement>().grounded;
 	}
 
@@ -47,12 +49,19 @@ public class Digging : MonoBehaviour {
 	
 	void OnCollisionStay2D(Collision2D collision) 
 	{
-		moveX = Input.GetAxis ("Horizontal");
+		//moveX = Input.GetAxis ("Horizontal");
+		if (!(IsAlmostZero(moveX)^IsAlmostZero(moveY))) {
+			StopDigging();
+			return;
+		}
+
 		if (grounded && collision.gameObject.tag == "DiggableWall") {
 			if (isMovementAttempted) {
 				foreach (var contact in collision.contacts) {
-					if (moveX == -contact.normal.x && contact.normal.y == 0) 
+					if (moveX == -contact.normal.x && IsAlmostZero(contact.normal.y) || moveY == -contact.normal.y && IsAlmostZero(contact.normal.x)) {
 						StartOrContinueDigging(collision.gameObject);
+						break;
+					}
 				}
 			} else {
 				StopDigging();
