@@ -4,6 +4,7 @@ using System.Collections;
 public class Digging : MonoBehaviour {
 
 	public float digTime = 2;
+	public GameObject DiggingParticleSystem;
 	
 	private bool isMovementAttempted = false;
 	private GameObject objectToDig;
@@ -29,8 +30,12 @@ public class Digging : MonoBehaviour {
 	{
 		if (objectToDig != newObjectToDig) {
 			objectToDig = newObjectToDig;
-			
+
 			Invoke("FinishedDigging", digTime);
+
+			DiggingParticleSystem.transform.position = newObjectToDig.transform.position;
+			DiggingParticleSystem.SetActive(true);
+			DiggingParticleSystem.GetComponent<ParticleSystem>().Play();
 		}
 	}
 	
@@ -43,6 +48,9 @@ public class Digging : MonoBehaviour {
 	void StopDigging()
 	{
 		CancelInvoke("FinishedDigging");
+
+		DiggingParticleSystem.SetActive(false);
+
 		if (objectToDig != null)
 			objectToDig = null;
 	}
