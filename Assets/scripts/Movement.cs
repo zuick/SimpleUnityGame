@@ -9,7 +9,11 @@ public class Movement : MonoBehaviour {
 	public GameObject groundCheck;
 	public LayerMask groundLayer;
 	public Animator anim;
-	public bool grounded = false;
+	
+	[HideInInspector] public bool grounded = false;
+	[HideInInspector] public float moveX;
+	[HideInInspector] public bool jump;	
+	[HideInInspector] public bool isWayBlocked = false;
 
 	private bool groundedPrevious = false;
 	
@@ -24,7 +28,8 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate (){
 
-		float moveX = Input.GetAxis ("Horizontal");
+		//float moveX = Input.GetAxis ("Horizontal");
+		if (isWayBlocked) moveX = 0f;
 
 		rigidbody2D.velocity = new Vector2 (moveX * speed, rigidbody2D.velocity.y);
 
@@ -43,7 +48,7 @@ public class Movement : MonoBehaviour {
 
 	void Update(){
 
-		bool jump = Input.GetButtonDown("Jump");
+		//bool jump = Input.GetButtonDown("Jump");
 
 		if (jump && grounded) {
 			rigidbody2D.AddForce (new Vector2 (0f, jumpForce));

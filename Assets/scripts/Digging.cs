@@ -9,15 +9,22 @@ public class Digging : MonoBehaviour {
 	private bool isMovementAttempted = false;
 	private GameObject objectToDig;
 	private bool grounded;
+	private bool isWayBlocked = false; // make use or remove
 	private float moveX = 0f;
 	private float moveY = 0f;
+	private Movement movementComponent;
+
+	void Awake()
+	{
+		movementComponent = GetComponent<Movement>();
+	}
 
 	void FixedUpdate()
 	{
 		moveX = Input.GetAxis("Horizontal");
 		moveY = Input.GetAxis("Vertical");
 		isMovementAttempted = !IsAlmostZero(moveX) || !IsAlmostZero(moveY);
-		grounded = GetComponent<Movement>().grounded;
+		grounded = movementComponent.grounded;
 	}
 
 	bool IsAlmostZero(float zeroCandidate)
@@ -29,6 +36,7 @@ public class Digging : MonoBehaviour {
 	void StartOrContinueDigging(GameObject newObjectToDig) 
 	{
 		if (objectToDig != newObjectToDig) {
+			isWayBlocked = true;
 			objectToDig = newObjectToDig;
 
 			Invoke("FinishedDigging", digTime);
@@ -48,7 +56,7 @@ public class Digging : MonoBehaviour {
 	void StopDigging()
 	{
 		CancelInvoke("FinishedDigging");
-
+		isWayBlocked = false;
 		DiggingParticleSystem.SetActive(false);
 
 		if (objectToDig != null)
